@@ -18,7 +18,6 @@ jobs:
         notebook: "Zeek_log_anonymiser/Bro-Zeek log parser and anonymiser.ipynb"
         params: ""
         isReport: False
-        poll: True
     - uses: actions/upload-artifact@master
       if: always()
       with:
