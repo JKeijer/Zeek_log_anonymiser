@@ -15,7 +15,7 @@ jobs:
         SECRETS: ${{ toJson(secrets) }}
         GITHUB: ${{ toJson(github) }}
       with:
-        notebook: "Zeek_log_anonymiser/Bro-Zeek log parser and anonymiser.ipynb"
+        notebook: "Bro-Zeek log parser and anonymiser.ipynb"
         params: ""
         isReport: False
     - uses: actions/upload-artifact@master
