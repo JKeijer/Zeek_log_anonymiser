@@ -6,4 +6,7 @@
 
 The PII information is listed in the PII list and one line of each log file is displayed below with the PII highlighted in red.
 
+To view the highligted fields online, visit: https://nbviewer.jupyter.org/github/JKeijer/Zeek_log_anonymiser/blob/main/Bro-Zeek%20log%20parser%20and%20anonymiser.ipynb
+
+
 [1] https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/
