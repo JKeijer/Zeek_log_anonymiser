@@ -61,6 +61,9 @@ PII = ['id.orig_h','id.resp_h',
 
 IP_fields = ['id.orig_h','id.resp_h','assigned_ip','answers','data_channel.orig_h','data_channel.resp_h','remote_ip']
 
+Query_fields = ['query']
+
+
 sub0_dict = {}
 sub1_dict = {}
 sub2_dict = {}
@@ -134,6 +137,31 @@ def get_subnet_perserving_ip(ip):
             ip_dict[ip] = random_ip
     return random_ip
 
+def get_domain_perserving_query(query_col):
+    tld = []
+    domain = []
+    sub_domain = []
+    for query in query_col:
+        query_split = query.split('.')
+        if len(query_split) > 2:
+            tld.append(query_split[-1])
+            domain.append(query_split[-2])
+            if len(query_split) > 2:
+                sub_domain.append(str("".join(query_split[:-2])))
+            else:
+                sub_domain.append("")
+        else: 
+            domain.append("-")
+            tld.append("-")
+            sub_domain.append("")
+    tld_encoded = pd.Series(LabelEncoder().fit_transform(tld)).astype(str)
+    domain_encoded = pd.Series(LabelEncoder().fit_transform(domain)).astype(str)
+    sub_domain_encoder = LabelEncoder().fit(sub_domain)
+    sub_domain = ["" if len(sub) < 1 else str(sub_domain_encoder.transform([sub])[0]) + "." for sub in sub_domain]
+    
+    return sub_domain+domain_encoded+["."]*len(query_col)+tld_encoded
+
+
 def build_dataframes(chosen_files):
     directories, filenames = get_files_and_dirs(dir_to_parse)
     orig_log_dataframes = {}
@@ -156,6 +184,8 @@ def anonymise_dataframes(orig_log_dataframes, chosen_files):
                 if column in PII:
                     if column in IP_fields:
                         log_dataframe[column] = [get_subnet_perserving_ip(ip) for ip in log_dataframe[column]]
+                    elif column in Query_fields:
+                        log_dataframe[column] = get_domain_perserving_query(log_dataframe[column])
                     else:
                         log_dataframe[column] = LabelEncoder().fit_transform(log_dataframe[column])
             log_dataframes[key] = log_dataframe
